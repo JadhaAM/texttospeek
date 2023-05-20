@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Text-to-Speech Converter</title>
+  <style>
+   
+    textarea {
+      width: 400px;
+      height: 200px;
+      resize: none;
+    }
+  
+    select {
+      margin-top: 10px;
+    }
+  
+    button {
+      margin-top: 10px;
+    }
+    
+  </style>
+   <style>
+    *{
+      margin: 0px;
+      padding: 0px;
+      font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif';
+    }
+    body {
+      /* background-image: linear-gradient( rgb(240, 89, 89),rgb(209, 92, 112),rgb(253, 227, 77)); */
+      background-image: url("/homebg.jfif");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+
+    }
+      h1{
+        font-size: 40px;
+        color: rgba(241, 238, 50, 0.87);
+      }
+     .content{
+       
+       width: 500px;
+       height: 500px;
+       margin: auto;
+       margin-top: 130px;
+       border: 4px solid rgb(248, 71, 71) ;
+       border-radius: 5%;
+       background-image: linear-gradient(to left,"red",);
+       display: flex;
+        flex-direction: column;
+        justify-content: center;
+        
+         align-items: center;
+         justify-content: space-around
+         
+         
+     }
+     #text-to-convert{
+       font-size: 50px;
+       width:450px;
+       height: 150px;;
+       color: antiquewhite;
+       text-decoration: none;
+       background:  transparent;
+       border: 2px solid greenyellow;
+       border-radius: 5px;
+     }
+     #stop-button {
+       padding: 20px 20px;
+        border-radius: 20px;
+        font-size: 25px;
+        background-color: rgb(73, 243, 243);
+     }
+     #stop-button:hover{
+      cursor: pointer;
+      font-size: 40px;
+        background-color: yellowgreen;
+        width: 200px;
+     }
+     #convert-button {
+       padding: 20px 20px;
+        border-radius: 20px;
+        font-size: 25px;
+       background-image: linear-gradient(to bottom,red,pink);
+     }
+     #convert-button:hover{
+      cursor: pointer;
+      font-size: 20px;
+      background-image: linear-gradient(to top,rgb(238, 132, 197),rgb(247, 238, 114));
+        width: 200px;
+     }
+     
+  </style>
+ 
+</head>
+<body>
+  <div class="content">
+  <h1>Text-to speech Converter </h1>
+  <textarea id="text-to-convert" placeholder="Enter text to convert"></textarea>
+  <select id="language-select">
+    <option value="en-US">English (US)</option>
+    <option value="en-GB">English (UK)</option>
+    <option value="fr-FR">French</option>
+    <option value="es-ES">Spanish (Spain)</option>
+    <!-- Add more language options here -->
+  </select>
+  <button id="convert-button">Convert to Speech</button>
+  <button id="stop-button" disabled>Stop</button>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js.0.12"></script>
+  <script>
+    var typed =new typed(".auto-type",{
+      Strings:["speeach converter","writng","reading"],
+      typeSpeed:150,
+      backSpeed:150,
+      loop:true
+    })
+  </script>
+  <script>
+    // Check if the browser supports the SpeechSynthesis API
+    if ('speechSynthesis' in window) {
+      const speechSynthesis = window.speechSynthesis;
+      const convertButton = document.getElementById('convert-button');
+      const stopButton = document.getElementById('stop-button');
+      const languageSelect = document.getElementById('language-select');
+      const textToConvert = document.getElementById('text-to-convert');
+
+      let isSpeaking = false;
+      let utterance;
+
+      convertButton.addEventListener('click', () => {
+        if (!isSpeaking) {
+          const selectedLanguage = languageSelect.value;
+          const text = textToConvert.value;
+  
+          utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = selectedLanguage;
+  
+          speechSynthesis.speak(utterance);
+          isSpeaking = true;
+  
+          convertButton.disabled = true;
+          stopButton.disabled = false;
+        }
+      });
+  
+      stopButton.addEventListener('click', () => {
+        if (isSpeaking) {
+          speechSynthesis.cancel();
+          isSpeaking = false;
+  
+          convertButton.disabled = false;
+          stopButton.disabled = true;
+        }
+      });
+  
+      speechSynthesis.addEventListener('end', () => {
+        isSpeaking = false;
+  
+        convertButton.disabled = false;
+        stopButton.disabled = true;
+      });
+    } else {
+      console.log('Text-to-speech is not supported in this browser.');
+    }
+  </script>
+</body>
+</html>
